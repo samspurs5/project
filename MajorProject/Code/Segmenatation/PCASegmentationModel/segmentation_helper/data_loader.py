@@ -77,3 +77,7 @@ class DataLoader():
                                                                     tfds.as_numpy(self.combined_test))))
         
         return combined_train,combined_test
+    
+    def import_raw_combined(self):
+        return self.combined_train, self.combined_test
+        
