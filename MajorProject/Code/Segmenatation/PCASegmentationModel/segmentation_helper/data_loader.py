@@ -20,7 +20,7 @@ class DataLoader():
     def combine(self,record):
         image = record[0]["image"]
         mask = record[0]["segmentation_mask"]
-        image = np.ones(mask.shape)*mask + image * abs(mask-np.ones(mask.shape))
+        image = image - image*mask
         return [image]
 
     def combine_dataset(self,record):
@@ -28,7 +28,7 @@ class DataLoader():
         image = record[0]["image"]
         mask = record[0]["segmentation_mask"]
         new_item.append(image)
-        new_item.append(np.ones(mask.shape)*mask + image * abs(mask-np.ones(mask.shape)))
+        new_item.append(image - image*mask)
         return [new_item]
 
 
