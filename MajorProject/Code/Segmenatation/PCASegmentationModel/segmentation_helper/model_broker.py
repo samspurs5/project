@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class ModelBroker():
-    def __init__(self,activity_regularizer=None,inverse_activity_regularizer=None,activation_before=False,count = 3,keep_percent=1.0, dirname = "model", sample_size=100, trainset=None, testset = None, flip = False):
+    def __init__(self, trainset=None, testset = None, count = 3,keep_percent=1.0, dirname = "model", sample_size=100,activity_regularizer=None,inverse_activity_regularizer=None,activation_before=False,flip = False):
         self.activity_regularizer = activity_regularizer
         self.inverse_activity_regularizer = inverse_activity_regularizer
         self.activation_before = activation_before
@@ -58,7 +58,8 @@ class ModelBroker():
                                 flip=self.flip,
                                 activity_regularizer=self.activity_regularizer,
                                 inverse_activity_regularizer=self.inverse_activity_regularizer,
-                                activation_before=self.activation_before)
+                                activation_before=self.activation_before,
+                                )
         sample = next(iter(self.testset.shuffle(100)))[0]
         print("sample.shape",sample.shape)
         sample = tf.reshape(sample, [1,sample.shape[0], sample.shape[1], sample.shape[2]])
@@ -91,36 +92,35 @@ class ModelBroker():
         return head, invhead
     
     
-    def check_build(self,head,invhead,testset):
-        plt.subplot(221)
-        plt.title('Original')
+    def check_build(self,head,invhead,testset,stats_only = False):
+ 
         sample = next(iter(testset.shuffle(100)))[0]
-
-        plt.imshow(sample)
-        print("sample.shape",sample.shape)
-
         pred = head([sample])
-
-        plt.subplot(222)
-        plt.title('Slice')
-        plt.imshow(pred[0,:,:,0]+0.5)
-        plt.subplot(223)
-        plt.title('Slice')
-        plt.imshow(pred[0,:,:,1]+0.5)
-
-        print("pred.shape",pred.shape)
-        recon = invhead(pred)[0]
-        print("recon.shape",recon.shape)
-        plt.subplot(224)
-        plt.title('Filtered')
-        plt.imshow(recon)
-        print("sample.dtype",sample.dtype)
-        print("recon[0].dtype",recon.dtype)
-        print("np.prod(sample.shape)",np.prod(sample.shape))
+        recon = invhead(pred)[0]        
         psnr = 10*np.log10( 1.0 /((np.linalg.norm(recon-sample)**2)/np.prod(sample.shape)))
         ncc = np.corrcoef(tf.reshape(sample, [-1]), tf.reshape(recon, [-1]))
-        print("psnr = ", psnr)
-        print("ncc = ", ncc)
-        print("sample[30:34,30:34,0]",sample[30:34,30:34,0])
-        print("recon[30:34,30:34,0]",recon[30:34,30:34,0])
+        if not stats_only:
+            plt.subplot(221)
+            plt.title('Original')
+            plt.imshow(sample)
+            print("sample.shape",sample.shape)
+            plt.subplot(222)
+            plt.title('Slice')
+            plt.imshow(pred[0,:,:,0]+0.5)
+            plt.subplot(223)
+            plt.title('Slice')
+            plt.imshow(pred[0,:,:,1]+0.5)
+            print("pred.shape",pred.shape)
+            print("recon.shape",recon.shape)
+            plt.subplot(224)
+            plt.title('Filtered')
+            plt.imshow(recon)
+            print("sample.dtype",sample.dtype)
+            print("recon[0].dtype",recon.dtype)
+            print("np.prod(sample.shape)",np.prod(sample.shape))
+            print("psnr = ", psnr)
+            print("ncc = ", ncc)
+            print("sample[30:34,30:34,0]",sample[30:34,30:34,0])
+            print("recon[30:34,30:34,0]",recon[30:34,30:34,0])
+        return psnr, ncc
 

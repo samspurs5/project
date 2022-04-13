@@ -130,6 +130,6 @@ dmypy.json
 
 
 #saved weigts
-.npy
-.h5
-.json
+*.npy
+*.h5
+*.json
