@@ -1,0 +1,6 @@
+,activity_regularizer,count,dice_mean_test,dice_mean_train,dice_std_test,dice_std_train,img_channel_size,img_train_time,iou_mean_test,iou_mean_train,iou_std_test,iou_std_train,keep_percent,linear_inverse_train_time,seg_channel_size,seg_train_time,test_img_ncc,test_img_psnr,test_seg_ncc,test_seg_psnr,train_img_ncc,train_img_psnr,train_seg_ncc,train_seg_psnr,training_data_size
+0,1.0,3.0,0.3971074787464545,0.939747609484341,0.19721738424982008,0.06620079345005668,16.0,33.3480007648468,0.3064026527934812,0.8605227935657374,0.1113313384698668,0.11742095390761459,0.1,381.0454406738281,16.0,33.3480007648468,"[[1.       0.951897]
+ [0.951897 1.      ]]",26.66881288951152,"[[1.         0.90813354]
+ [0.90813354 1.        ]]",26.957078871769884,"[[1.         0.96068803]
+ [0.96068803 1.        ]]",23.906023418588973,"[[1.         0.81343464]
+ [0.81343464 1.        ]]",19.524588132559856,800.0
