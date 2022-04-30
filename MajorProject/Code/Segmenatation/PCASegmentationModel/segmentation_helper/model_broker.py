@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class ModelBroker():
-    def __init__(self, trainset=None, testset = None, count = 3,keep_percent=1.0, dirname = "model", sample_size=100,activity_regularizer=None,inverse_activity_regularizer=None,activation_before=False,flip = False):
+    def __init__(self, trainset=None, testset = None, count = 3,keep_percent=1.0, dirname = "model", sample_size=100,activity_regularizer=None,inverse_activity_regularizer=None,activation_before=False,flip = False,channels=3):
         self.activity_regularizer = activity_regularizer
         self.inverse_activity_regularizer = inverse_activity_regularizer
         self.activation_before = activation_before
@@ -16,6 +16,7 @@ class ModelBroker():
         self.trainset = trainset
         self.testset = testset
         self.flip = flip
+        self.channels = channels
         
     def extract_mean(self,invhead, testset):
         lastLayerIndex = -1
@@ -59,6 +60,7 @@ class ModelBroker():
                                 activity_regularizer=self.activity_regularizer,
                                 inverse_activity_regularizer=self.inverse_activity_regularizer,
                                 activation_before=self.activation_before,
+                                channels = self.channels
                                 )
         sample = next(iter(self.testset.shuffle(100)))[0]
         print("sample.shape",sample.shape)
@@ -87,7 +89,8 @@ class ModelBroker():
                                 flip=self.flip,
                                 activity_regularizer=self.activity_regularizer,
                                 inverse_activity_regularizer=self.inverse_activity_regularizer,
-                                activation_before=self.activation_before)
+                                activation_before=self.activation_before,
+                                channels = self.channels)
         self.save_weights(head, invhead)
         return head, invhead
     

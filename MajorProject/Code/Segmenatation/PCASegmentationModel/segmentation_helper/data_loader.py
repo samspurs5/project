@@ -10,11 +10,10 @@ class DataLoader():
         elif dataset == "pets":
             load_dataset = "oxford_iiit_pet"
         self.dataset = dataset
-        self.ds, _ = self._import_data(load_dataset)
+        self.ds = self._import_data(load_dataset)
         if take != None:
             self.ds = self.ds.take(take)
         self.IMAGE_SIZE = IMAGE_SIZE
-        
         
     def _scale_and_resize(self,image):
         image = image / 255
@@ -32,15 +31,15 @@ class DataLoader():
 
     def pre_process_image(self,record):
         image = record["image"]
-        image = tf.clip_by_value(image,10,255)
+        #image = tf.clip_by_value(image,10,255)
         image = self._scale_and_resize(image)
         return image
 
-
     def _import_data(self,dataset):
-        ds,info = tfds.load(dataset, split='all',with_info=True)
-        return ds,info
-
+        builder = tfds.builder(dataset)
+        builder.download_and_prepare()
+        ds = builder.as_dataset(split=["all"])[0]
+        return ds
 
     def import_processed_img(self):
         img_ds = self.ds.map(lambda x:[self.pre_process_image(x)])
